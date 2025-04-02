@@ -1,4 +1,4 @@
-from decord import VideoReader, cpu  # pip install decord
+import cv2
 class MultiplePathsInput:
     @classmethod
     def INPUT_TYPES(s):
@@ -29,16 +29,25 @@ with the **inputcount** and clicking update.
             return {"type": "image", "image": f"{file_path}"}
         elif ext in ["mp4", "mkv", "mov", "avi", "flv", "wmv", "webm", "m4v"]:
             print("source_video_path:", file_path)
-            vr = VideoReader(file_path, ctx=cpu(0))
+            #vr = VideoReader(file_path, ctx=cpu(0))
+            vidObj = cv2.VideoCapture(file_path)
+            vr=[]
+            while vidObj.isOpened():
+                ret, frame = vidObj.read()
+                if not ret:
+                    break
+                else:
+                    vr.append(frame)
             total_frames = len(vr) + 1
             print("Total frames:", total_frames)
-            avg_fps = vr.get_avg_fps()
+            avg_fps = vidObj.get(cv2.CAP_PROP_FPS)
             print("Get average FPS(frame per second):", avg_fps)
             duration = len(vr) / avg_fps
             print("Total duration:", duration, "seconds")
             width = vr[0].shape[1]
             height = vr[0].shape[0]
             print("Video resolution(width x height):", width, "x", height)
+            vidObj.release()
             return {
                 "type": "video",
                 "video": f"{file_path}",

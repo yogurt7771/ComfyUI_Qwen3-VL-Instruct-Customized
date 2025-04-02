@@ -1,11 +1,14 @@
 import os
 import torch
 import folder_paths
+from PIL import Image
+from torchvision.transforms import ToPILImage
 from transformers import (
     Qwen2VLForConditionalGeneration,
     AutoProcessor,
     BitsAndBytesConfig,
 )
+import model_management
 from qwen_vl_utils import process_vision_info
 
 
@@ -14,9 +17,7 @@ class Qwen2_VQA:
         self.model_checkpoint = None
         self.processor = None
         self.model = None
-        self.device = (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
+        self.device = model_management.get_torch_device()
         self.bf16_support = (
             torch.cuda.is_available()
             and torch.cuda.get_device_capability(self.device)[0] >= 8
@@ -70,10 +71,18 @@ class Qwen2_VQA:
                     },
                 ),
                 "seed": ("INT", {"default": -1}),  # add seed parameter, default is -1
+                "attention": (
+                    [
+                        "eager",
+                        "sdpa",
+                        "flash_attention_2",
+                    ],
+                ),
             },
             "optional": {
                 "source_path": ("PATH",),
-            },
+                "image": ("IMAGE",)
+            }
         }
 
     RETURN_TYPES = ("STRING",)
@@ -92,6 +101,8 @@ class Qwen2_VQA:
         seed,
         quantization,
         source_path=None,
+        image=None,  # add image parameter
+        attention="eager",
     ):
         if seed != -1:
             torch.manual_seed(seed)
@@ -132,13 +143,23 @@ class Qwen2_VQA:
                 self.model_checkpoint,
                 torch_dtype=torch.bfloat16 if self.bf16_support else torch.float16,
                 device_map="auto",
-                attn_implementation="sdpa",
+                attn_implementation=attention,
                 quantization_config=quantization_config,
             )
+
+        temp_path = None
+        if (image is not None):
+            pil_image = ToPILImage()(image[0].permute(2, 0, 1))
+            temp_path = f"/var/tmp/temp_image_{seed}.png"
+            pil_image.save(temp_path)
 
         with torch.no_grad():
             if source_path:
                 messages = [
+                    {
+                        "role": "system",
+                        "content": "You are Qwen2, you are a helpful assistant expert in turning images into words.",
+                    },
                     {
                         "role": "user",
                         "content": source_path
@@ -147,6 +168,21 @@ class Qwen2_VQA:
                         ],
                     }
                 ]
+            elif (temp_path):
+                messages = [
+                    {
+                        "role": "system",
+                        "content": "You are Qwen2, you are a helpful assistant expert in turning images into words.",
+                    },
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "image", "image": f'file://{temp_path}'},
+                            {"type": "text", "text": text},
+                        ],
+                    }
+                ]
+                # raise ValueError("Either image or video must be provided")
             else:
                 messages = [
                     {
@@ -156,7 +192,6 @@ class Qwen2_VQA:
                         ],
                     }
                 ]
-                # raise ValueError("Either image or video must be provided")
 
             # Preparation for inference
             text = self.processor.apply_chat_template(
@@ -170,9 +205,9 @@ class Qwen2_VQA:
                 padding=True,
                 return_tensors="pt",
             )
-            inputs = inputs.to("cuda")
+            inputs = inputs.to(self.device)
             # Inference: Generation of the output
-            generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens)
+            generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens, temperature=temperature)
             generated_ids_trimmed = [
                 out_ids[len(in_ids) :]
                 for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
@@ -189,7 +224,8 @@ class Qwen2_VQA:
                 del self.model  # release model memory
                 self.processor = None  # set processor to None
                 self.model = None  # set model to None
-                torch.cuda.empty_cache()  # release GPU memory
-                torch.cuda.ipc_collect()
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()  # release GPU memory
+                    torch.cuda.ipc_collect()
 
             return (result,)
