@@ -14,8 +14,8 @@ class MultiplePathsInput:
     FUNCTION = "combine"
     CATEGORY = "Comfyui_Qwen2-VL-Instruct"
     DESCRIPTION = """
-Creates a path batch from multiple paths.  
-You can set how many inputs the node has,  
+Creates a path batch from multiple paths.
+You can set how many inputs the node has,
 with the **inputcount** and clicking update.
 """
 
@@ -24,7 +24,7 @@ with the **inputcount** and clicking update.
     @staticmethod
     def convert_path_to_json(file_path):
         ext = file_path.split('.')[-1].lower()
-        
+
         if ext in ["jpg", "jpeg", "png", "bmp", "tiff", "webp"]:
             return {"type": "image", "image": f"{file_path}"}
         elif ext in ["mp4", "mkv", "mov", "avi", "flv", "wmv", "webm", "m4v"]:

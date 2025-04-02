@@ -1,9 +1,5 @@
 # ComfyUI_Qwen2-VL-Instruct with Apple Silicon support
 
-This fork (from [71091a4](https://github.com/IuvenisSapiens/ComfyUI_Qwen2-VL-Instruct/commit/71091a4dbbefc76ef2059e0d99ee97c98e86e7ae)) incorporates the support of Apple Silicon (M1, M2, etc.) to ComfyUI_Qwen2-VL-Instruct.
-
-Code tested on MacBook Pro M1 Max 64GB RAM with torch nightly build `torch-2.6.0.dev20241225` and Python 3.12.7. (I have not tested extensively on video, ymmv, fixes are welcome.)
-
 ### Major changes:
 
 - Added Image as input so you can use a **Load Image** or **Load Image List From Dir** node directly.

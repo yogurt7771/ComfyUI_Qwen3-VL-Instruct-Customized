@@ -47,7 +47,7 @@
       },
       "widgets_values": [
         "Identify the similarities between these images.",
-        "Qwen2-VL-2B-Instruct",
+        "Qwen2.5-VL-3B-Instruct",
         "none",
         false,
         0.7,

@@ -1,10 +1,9 @@
 import os
 import torch
 import folder_paths
-from PIL import Image
 from torchvision.transforms import ToPILImage
 from transformers import (
-    Qwen2VLForConditionalGeneration,
+    Qwen2_5_VLForConditionalGeneration,
     AutoProcessor,
     BitsAndBytesConfig,
 )
@@ -30,14 +29,12 @@ class Qwen2_VQA:
                 "text": ("STRING", {"default": "", "multiline": True}),
                 "model": (
                     [
-                        "Qwen2-VL-2B-Instruct-GPTQ-Int4",
-                        "Qwen2-VL-2B-Instruct-GPTQ-Int8",
-                        "Qwen2-VL-2B-Instruct",
-                        "Qwen2-VL-7B-Instruct-GPTQ-Int4",
-                        "Qwen2-VL-7B-Instruct-GPTQ-Int8",
-                        "Qwen2-VL-7B-Instruct",
+                        "Qwen2.5-VL-3B-Instruct",
+                        "Qwen2.5-VL-7B-Instruct",
+                        "Qwen2.5-VL-32B-Instruct",
+                        "Qwen2.5-VL-72B-Instruct",
                     ],
-                    {"default": "Qwen2-VL-2B-Instruct"},
+                    {"default": "Qwen2.5-VL-3B-Instruct"},
                 ),
                 "quantization": (
                     ["none", "4bit", "8bit"],
@@ -139,7 +136,7 @@ class Qwen2_VQA:
             else:
                 quantization_config = None
 
-            self.model = Qwen2VLForConditionalGeneration.from_pretrained(
+            self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 self.model_checkpoint,
                 torch_dtype=torch.bfloat16 if self.bf16_support else torch.float16,
                 device_map="auto",
@@ -158,7 +155,7 @@ class Qwen2_VQA:
                 messages = [
                     {
                         "role": "system",
-                        "content": "You are Qwen2, you are a helpful assistant expert in turning images into words.",
+                        "content": "You are QwenVL, you are a helpful assistant expert in turning images into words.",
                     },
                     {
                         "role": "user",
@@ -172,7 +169,7 @@ class Qwen2_VQA:
                 messages = [
                     {
                         "role": "system",
-                        "content": "You are Qwen2, you are a helpful assistant expert in turning images into words.",
+                        "content": "You are QwenVL, you are a helpful assistant expert in turning images into words.",
                     },
                     {
                         "role": "user",
