@@ -145,7 +145,7 @@ class Qwen2_VQA:
         temp_path = None
         if image is not None:
             pil_image = ToPILImage()(image[0].permute(2, 0, 1))
-            temp_path = Path(folder_paths.input_directory) / f"temp_image_{seed}.png"
+            temp_path = Path(folder_paths.temp_directory) / f"temp_image_{seed}.png"
             pil_image.save(temp_path)
 
         with torch.no_grad():
