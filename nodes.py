@@ -9,6 +9,7 @@ from transformers import (
 )
 import model_management
 from qwen_vl_utils import process_vision_info
+from pathlib import Path
 
 
 class Qwen2_VQA:
@@ -76,10 +77,7 @@ class Qwen2_VQA:
                     ],
                 ),
             },
-            "optional": {
-                "source_path": ("PATH",),
-                "image": ("IMAGE",)
-            }
+            "optional": {"source_path": ("PATH",), "image": ("IMAGE",)},
         }
 
     RETURN_TYPES = ("STRING",)
@@ -145,9 +143,9 @@ class Qwen2_VQA:
             )
 
         temp_path = None
-        if (image is not None):
+        if image is not None:
             pil_image = ToPILImage()(image[0].permute(2, 0, 1))
-            temp_path = f"/var/tmp/temp_image_{seed}.png"
+            temp_path = Path(folder_paths.input_directory) / f"temp_image_{seed}.png"
             pil_image.save(temp_path)
 
         with torch.no_grad():
@@ -163,9 +161,9 @@ class Qwen2_VQA:
                         + [
                             {"type": "text", "text": text},
                         ],
-                    }
+                    },
                 ]
-            elif (temp_path):
+            elif temp_path:
                 messages = [
                     {
                         "role": "system",
@@ -174,10 +172,10 @@ class Qwen2_VQA:
                     {
                         "role": "user",
                         "content": [
-                            {"type": "image", "image": f'file://{temp_path}'},
+                            {"type": "image", "image": f"file://{temp_path}"},
                             {"type": "text", "text": text},
                         ],
-                    }
+                    },
                 ]
                 # raise ValueError("Either image or video must be provided")
             else:
@@ -204,7 +202,9 @@ class Qwen2_VQA:
             )
             inputs = inputs.to(self.device)
             # Inference: Generation of the output
-            generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens, temperature=temperature)
+            generated_ids = self.model.generate(
+                **inputs, max_new_tokens=max_new_tokens, temperature=temperature
+            )
             generated_ids_trimmed = [
                 out_ids[len(in_ids) :]
                 for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
