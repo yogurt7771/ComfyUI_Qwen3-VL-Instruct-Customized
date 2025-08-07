@@ -82,7 +82,7 @@ class Qwen2_VQA:
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "inference"
-    CATEGORY = "Comfyui_Qwen2-VL-Instruct"
+    CATEGORY = "Comfyui_Qwen2_5-VL-Instruct"
 
     def inference(
         self,

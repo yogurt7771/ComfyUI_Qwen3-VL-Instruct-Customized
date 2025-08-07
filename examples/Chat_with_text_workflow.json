@@ -1,33 +1,34 @@
 {
+  "id": "fe8a1c0d-44f6-45d5-9f1c-366edd542c81",
+  "revision": 0,
   "last_node_id": 25,
   "last_link_id": 24,
   "nodes": [
     {
       "id": 25,
       "type": "Qwen2_VQA",
-      "pos": {
-        "0": -1794,
-        "1": -1783,
-        "2": 0,
-        "3": 0,
-        "4": 0,
-        "5": 0,
-        "6": 0,
-        "7": 0,
-        "8": 0,
-        "9": 0
-      },
-      "size": {
-        "0": 400,
-        "1": 292
-      },
+      "pos": [
+        -1794,
+        -1783
+      ],
+      "size": [
+        400,
+        348
+      ],
       "flags": {},
       "order": 0,
       "mode": 0,
       "inputs": [
         {
           "name": "source_path",
+          "shape": 7,
           "type": "PATH",
+          "link": null
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
           "link": null
         }
       ],
@@ -35,18 +36,18 @@
         {
           "name": "STRING",
           "type": "STRING",
+          "slot_index": 0,
           "links": [
             24
-          ],
-          "shape": 3,
-          "slot_index": 0
+          ]
         }
       ],
       "properties": {
-        "Node name for S&R": "Qwen2_VQA"
+        "Node name for S&R": "Qwen2_VQA",
+        "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "Quantum Group",
+        "Why is the sky blue?",
         "Qwen2.5-VL-3B-Instruct",
         "4bit",
         true,
@@ -54,28 +55,21 @@
         2048,
         200704,
         1003520,
-        908,
-        "randomize"
+        1361,
+        "randomize",
+        "eager"
       ]
     },
     {
       "id": 24,
       "type": "DisplayText",
-      "pos": {
-        "0": -1377,
-        "1": -1782,
-        "2": 0,
-        "3": 0,
-        "4": 0,
-        "5": 0,
-        "6": 0,
-        "7": 0,
-        "8": 0,
-        "9": 0
-      },
+      "pos": [
+        -1377,
+        -1782
+      ],
       "size": [
-        340.37530120020256,
-        290.90455496540926
+        359.06829833984375,
+        345.945068359375
       ],
       "flags": {},
       "order": 1,
@@ -84,26 +78,25 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 24,
-          "widget": {
-            "name": "text"
-          }
+          "link": 24
         }
       ],
       "outputs": [
         {
           "name": "STRING",
+          "shape": 6,
           "type": "STRING",
-          "links": null,
-          "shape": 6
+          "links": null
         }
       ],
       "properties": {
-        "Node name for S&R": "DisplayText"
+        "Node name for S&R": "DisplayText",
+        "widget_ue_connectable": {
+          "text": true
+        }
       },
       "widgets_values": [
-        "",
-        "Quantum groups are mathematical structures that were introduced in the late 20th century as a generalization of Lie groups and Hopf algebras. They are used in various areas of mathematics and theoretical physics, including knot theory, quantum field theory, and statistical mechanics.\n\nA quantum group is typically defined as a Hopf algebra over a field, equipped with a comultiplication and an antipode that satisfy certain conditions. The most well-known example of a quantum group is the quantum group associated to a Lie algebra, which is obtained by deforming the universal enveloping algebra of the Lie algebra using a parameter \\(q\\).\n\nQuantum groups have many interesting properties and applications. For example, they can be used to construct solutions to the Yang-Baxter equation, which is a key equation in the theory of integrable systems. They also play a role in the study of quantum field theories and the classification of topological phases of matter."
+        "The sky appears blue because of the scattering of sunlight by air molecules. The sun's spectrum contains all colors of light, but when it reaches our planet, the Earth's atmosphere scatters these colors in all directions. The blue color of the sky is scattered more than other colors because different wavelengths of light scatter differently. As a result, the sky appears blue during the day time asthere is more blue light."
       ]
     }
   ],
@@ -121,12 +114,19 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.0610764609500007,
+      "scale": 1.2839025177495016,
       "offset": [
-        1892.6881649674706,
-        1881.970974266596
+        1997.807524738286,
+        1931.0265917266522
       ]
-    }
+    },
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "frontendVersion": "1.25.5",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
   },
   "version": 0.4
 }

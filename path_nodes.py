@@ -12,7 +12,7 @@ class MultiplePathsInput:
     RETURN_TYPES = ("PATH",)
     RETURN_NAMES = ("paths",)
     FUNCTION = "combine"
-    CATEGORY = "Comfyui_Qwen2-VL-Instruct"
+    CATEGORY = "Comfyui_Qwen2_5-VL-Instruct"
     DESCRIPTION = """
 Creates a path batch from multiple paths.
 You can set how many inputs the node has,
