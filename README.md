@@ -22,8 +22,9 @@ This is an implementation of [Qwen2.5-VL-Instruct](https://github.com/QwenLM/Qwe
 
 ![Chat_with_multiple_images_workflow preview](examples/Chat_with_multiple_images_workflow.png)
 
-> [!IMPORTANT] Important Notes for Using the Workflow
-> Please ensure that you have the "Display Text node" available in your ComfyUI setup. If you encounter any issues with this node being missing, you can find it in the [ComfyUI_MiniCPM-V-4 repository](https://github.com/IuvenisSapiens/ComfyUI_MiniCPM-V-4). Installing this additional addon will make the "Display Text node" available for use.
+> [!IMPORTANT]
+> Important Notes for Using the Workflow
+> - Please ensure that you have the "Display Text node" available in your ComfyUI setup. If you encounter any issues with this node being missing, you can find it in the [ComfyUI_MiniCPM-V-4 repository](https://github.com/IuvenisSapiens/ComfyUI_MiniCPM-V-4). Installing this additional addon will make the "Display Text node" available for use.
 
 ## Installation
 
