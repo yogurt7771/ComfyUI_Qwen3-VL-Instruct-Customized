@@ -48,14 +48,14 @@
       },
       "widgets_values": [
         "Why is the sky blue?",
-        "Qwen3-VL-3B-Instruct",
-        "4bit",
+        "Qwen3-VL-4B-Instruct-FP8",
+        "none",
         true,
         0.7,
         2048,
         200704,
         1003520,
-        1361,
+        33,
         "randomize",
         "eager"
       ]
@@ -96,7 +96,7 @@
         }
       },
       "widgets_values": [
-        "The sky appears blue because of the scattering of sunlight by air molecules. The sun's spectrum contains all colors of light, but when it reaches our planet, the Earth's atmosphere scatters these colors in all directions. The blue color of the sky is scattered more than other colors because different wavelengths of light scatter differently. As a result, the sky appears blue during the day time asthere is more blue light."
+        "The sky appears blue due to a phenomenon called **Rayleigh scattering**.\n\nHere’s how it works:\n\n1. **Sunlight is made of many colors**: When sunlight reaches Earth, it’s composed of all the colors of the visible spectrum — red, orange, yellow, green, blue, indigo, and violet — each with a different wavelength.\n\n2. **Air molecules scatter light**: As sunlight passes through the Earth’s atmosphere, it interacts with gas molecules (like nitrogen and oxygen) in the air. These molecules are much smaller than the wavelength of visible light.\n\n3. **Shorter wavelengths scatter more**: The blue and violet wavelengths of light are shorter and scatter more easily than the longer red and orange wavelengths. This scattering happens in all directions.\n\n4. **Our eyes see blue**: While violet light scatters even more, our eyes are more sensitive to blue light, and our atmosphere absorbs most of the violet light. So, the blue light scatters all around us, making the sky appear blue during the day.\n\n5. **Why not violet?**: Although violet light scatters more, it’s mostly absorbed by the upper atmosphere and doesn’t reach our eyes in large quantities — so we see blue, not violet.\n\n**Bonus: Why is the sky red at sunset?**\nAt sunrise and sunset, sunlight travels through more of the atmosphere. This means the blue and green light is scattered away, and the remaining red, orange, and yellow light reaches our eyes — hence the red or orange sky.\n\n✅ So, in short: **The sky is blue because shorter blue wavelengths scatter more in the atmosphere, and our eyes are sensitive to that blue light.**\n\n---\n\n*Fun fact: If you were on Mars, the sky would be reddish — because its thin atmosphere is mostly dust and lacks the nitrogen/oxygen to scatter blue light as efficiently.*"
       ]
     }
   ],
@@ -114,15 +114,15 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.2839025177495016,
+      "scale": 1.4122927695244518,
       "offset": [
-        1997.807524738286,
-        1931.0265917266522
+        1860.5838050389152,
+        1891.94118765146
       ]
     },
+    "frontendVersion": "1.29.1",
     "ue_links": [],
     "links_added_by_ue": [],
-    "frontendVersion": "1.25.5",
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
