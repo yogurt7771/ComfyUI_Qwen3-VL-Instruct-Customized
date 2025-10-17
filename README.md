@@ -1,6 +1,6 @@
-# ComfyUI_Qwen2_5-VL-Instruct
+# Comfyui_Qwen3-VL-Instruct
 
-This is an implementation of [Qwen2.5-VL-Instruct](https://github.com/QwenLM/Qwen2.5-VL) by [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which includes, but is not limited to, support for text-based queries, video queries, single-image queries, and multi-image queries to generate captions or responses.
+This is an implementation of [Qwen3-VL-Instruct](https://github.com/QwenLM/Qwen3-VL) by [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which includes, but is not limited to, support for text-based queries, video queries, single-image queries, and multi-image queries to generate captions or responses.
 
 ---
 
@@ -28,7 +28,7 @@ This is an implementation of [Qwen2.5-VL-Instruct](https://github.com/QwenLM/Qwe
 
 ## Installation
 
-- Install from [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) (search for `Qwen2`)
+- Install from [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager) (search for `Qwen3`)
 
 - Download or git clone this repository into the `ComfyUI\custom_nodes\` directory and run:
 

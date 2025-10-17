@@ -84,7 +84,7 @@
     },
     {
       "id": 56,
-      "type": "Qwen2_VQA",
+      "type": "Qwen3_VQA",
       "pos": [
         -53.250892639160156,
         -118.69114685058594
@@ -121,12 +121,12 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "Qwen2_VQA",
+        "Node name for S&R": "Qwen3_VQA",
         "widget_ue_connectable": {}
       },
       "widgets_values": [
         "Describe the image in detail",
-        "Qwen2.5-VL-3B-Instruct",
+        "Qwen3-VL-3B-Instruct",
         "4bit",
         false,
         0.7,

@@ -3,7 +3,7 @@ import torch
 import folder_paths
 from torchvision.transforms import ToPILImage
 from transformers import (
-    Qwen2_5_VLForConditionalGeneration,
+    Qwen3VLForConditionalGeneration,
     AutoProcessor,
     BitsAndBytesConfig,
 )
@@ -12,7 +12,7 @@ from qwen_vl_utils import process_vision_info
 from pathlib import Path
 
 
-class Qwen2_VQA:
+class Qwen3_VQA:
     def __init__(self):
         self.model_checkpoint = None
         self.processor = None
@@ -30,12 +30,16 @@ class Qwen2_VQA:
                 "text": ("STRING", {"default": "", "multiline": True}),
                 "model": (
                     [
-                        "Qwen2.5-VL-3B-Instruct",
-                        "Qwen2.5-VL-7B-Instruct",
-                        "Qwen2.5-VL-32B-Instruct",
-                        "Qwen2.5-VL-72B-Instruct",
+                        "Qwen3-VL-4B-Instruct-FP8",
+                        "Qwen3-VL-4B-Thinking-FP8",
+                        "Qwen3-VL-8B-Instruct-FP8",
+                        "Qwen3-VL-8B-Thinking-FP8",
+                        "Qwen3-VL-4B-Instruct",
+                        "Qwen3-VL-4B-Thinking",
+                        "Qwen3-VL-8B-Instruct",
+                        "Qwen3-VL-8B-Thinking",
                     ],
-                    {"default": "Qwen2.5-VL-3B-Instruct"},
+                    {"default": "Qwen3-VL-4B-Instruct-FP8"},
                 ),
                 "quantization": (
                     ["none", "4bit", "8bit"],
@@ -82,7 +86,7 @@ class Qwen2_VQA:
 
     RETURN_TYPES = ("STRING",)
     FUNCTION = "inference"
-    CATEGORY = "Comfyui_Qwen2_5-VL-Instruct"
+    CATEGORY = "Comfyui_Qwen3-VL-Instruct"
 
     def inference(
         self,
@@ -134,9 +138,9 @@ class Qwen2_VQA:
             else:
                 quantization_config = None
 
-            self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            self.model = Qwen3VLForConditionalGeneration.from_pretrained(
                 self.model_checkpoint,
-                torch_dtype=torch.bfloat16 if self.bf16_support else torch.float16,
+                dtype=torch.bfloat16 if self.bf16_support else torch.float16,
                 device_map="auto",
                 attn_implementation=attention,
                 quantization_config=quantization_config,

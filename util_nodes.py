@@ -22,7 +22,7 @@ class ImageLoader:
             "required": {"image": (sorted(files), {"image_upload": True})},
         }
 
-    CATEGORY = "Comfyui_Qwen2_5-VL-Instruct"
+    CATEGORY = "Comfyui_Qwen3-VL-Instruct"
 
     RETURN_TYPES = ("IMAGE", "MASK", "PATH")
     FUNCTION = "load_image"
@@ -101,7 +101,7 @@ class VideoLoader(ComfyNodeABC):
             "required": {"file": (sorted(files), {"video_upload": True})},
         }
 
-    CATEGORY = "Comfyui_Qwen2_5-VL-Instruct"
+    CATEGORY = "Comfyui_Qwen3-VL-Instruct"
 
     RETURN_TYPES = (IO.VIDEO, "PATH")
     FUNCTION = "load_video"
