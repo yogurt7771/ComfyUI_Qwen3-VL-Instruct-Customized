@@ -7,6 +7,12 @@ class MultiplePathsInput:
                 "inputcount": ("INT", {"default": 1, "min": 1, "max": 1000, "step": 1}),
                 "path_1": ("PATH",),
             },
+            "optional": {
+                "sample_fps": ("INT", {"default": 1, "min": 1, "max": 1000, "step": 1}),
+                "max_frames": ("INT", {"default": 2, "min": 2, "max": (1 << 63) - 1 , "step": 1}),
+                "use_total_frames": ("BOOLEAN", {"default": True}),
+                "use_original_fps_as_sample_fps": ("BOOLEAN", {"default": True}),
+            }
         }
 
     RETURN_TYPES = ("PATH",)
@@ -22,7 +28,7 @@ with the **inputcount** and clicking update.
 
 
     @staticmethod
-    def convert_path_to_json(file_path):
+    def convert_path_to_json(file_path,sample_fps=1,max_frames=1,use_total_frames=True,use_original_fps_as_sample_fps=True):
         ext = file_path.split('.')[-1].lower()
 
         if ext in ["jpg", "jpeg", "png", "bmp", "tiff", "webp"]:
@@ -51,7 +57,8 @@ with the **inputcount** and clicking update.
             return {
                 "type": "video",
                 "video": f"{file_path}",
-                "fps": avg_fps,
+                "fps": avg_fps if use_original_fps_as_sample_fps else sample_fps,
+                'max_frames': total_frames if use_total_frames  else max_frames
             }
         else:
             return None
@@ -62,7 +69,10 @@ with the **inputcount** and clicking update.
         path_list = []
         for c in range(inputcount):
             path = kwargs[f"path_{c + 1}"]
-            path = self.convert_path_to_json(path)
+
+            filtered_kwargs = {k: v for k, v in kwargs.items() if not k.startswith("path_")}
+
+            path = self.convert_path_to_json(path,**filtered_kwargs)
             print(path)
             path_list.append(path)
         print(path_list)
