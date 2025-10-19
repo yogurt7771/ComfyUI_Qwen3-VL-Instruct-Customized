@@ -8,6 +8,7 @@ from PIL import Image, ImageOps, ImageSequence
 from comfy.comfy_types import IO, ComfyNodeABC
 from comfy_api.latest import InputImpl
 
+
 class ImageLoader:
     @classmethod
     def INPUT_TYPES(s):
@@ -130,10 +131,11 @@ class VideoLoaderPath(ComfyNodeABC):
     @classmethod
     def INPUT_TYPES(s):
         return {
-           "required": {
+            "required": {
                 "file": ("STRING", {"placeholder": "X://insert/path/here.mp4"}),
             },
         }
+
     CATEGORY = "Comfyui_Qwen3-VL-Instruct"
 
     RETURN_TYPES = (IO.VIDEO, "PATH")

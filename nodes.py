@@ -7,7 +7,7 @@ from transformers import (
     AutoProcessor,
     BitsAndBytesConfig,
 )
-import model_management
+import comfy.model_management
 from qwen_vl_utils import process_vision_info
 from pathlib import Path
 
@@ -17,7 +17,7 @@ class Qwen3_VQA:
         self.model_checkpoint = None
         self.processor = None
         self.model = None
-        self.device = model_management.get_torch_device()
+        self.device = comfy.model_management.get_torch_device()
         self.bf16_support = (
             torch.cuda.is_available()
             and torch.cuda.get_device_capability(self.device)[0] >= 8
