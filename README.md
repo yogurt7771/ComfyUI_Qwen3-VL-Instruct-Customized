@@ -24,7 +24,7 @@ This is an implementation of [Qwen3-VL-Instruct](https://github.com/QwenLM/Qwen3
 
 > [!IMPORTANT]
 > Important Notes for Using the Workflow
-> - Please ensure that you have the "Display Text node" available in your ComfyUI setup. If you encounter any issues with this node being missing, you can find it in the [ComfyUI_MiniCPM-V-4 repository](https://github.com/IuvenisSapiens/ComfyUI_MiniCPM-V-4). Installing this additional addon will make the "Display Text node" available for use.
+> - Please ensure that you have the "Display Text node" available in your ComfyUI setup. If you encounter any issues with this node being missing, you can find it in the [ComfyUI_MiniCPM-V-4_5 repository](https://github.com/IuvenisSapiens/ComfyUI_MiniCPM-V-4_5). Installing this additional addon will make the "Display Text node" available for use.
 
 ## Installation
 
