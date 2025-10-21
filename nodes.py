@@ -12,7 +12,7 @@ from qwen_vl_utils import process_vision_info
 from pathlib import Path
 
 
-class Qwen3_VQA:
+class Qwen3_VQA_Customized:
     def __init__(self):
         self.model_checkpoint = None
         self.processor = None
@@ -27,7 +27,15 @@ class Qwen3_VQA:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "text": ("STRING", {"default": "", "multiline": True}),
+                "system": (
+                    "STRING",
+                    {
+                        "default": "You are QwenVL, you are a helpful assistant expert in turning images into words.",
+                        "multiline": True,
+                    },
+                ),
+                "user": ("STRING", {"default": "", "multiline": True}),
+                "assistant": ("STRING", {"default": "", "multiline": True}),
                 "model": (
                     [
                         "Qwen3-VL-4B-Instruct-FP8",
@@ -49,6 +57,10 @@ class Qwen3_VQA:
                 "temperature": (
                     "FLOAT",
                     {"default": 0.7, "min": 0, "max": 1, "step": 0.1},
+                ),
+                "repetition_penalty": (
+                    "FLOAT",
+                    {"default": 1.15, "min": 1, "max": 2, "step": 0.01},
                 ),
                 "max_new_tokens": (
                     "INT",
@@ -79,7 +91,7 @@ class Qwen3_VQA:
                         "sdpa",
                         "flash_attention_2",
                     ],
-                ),
+                )
             },
             "optional": {"source_path": ("PATH",), "image": ("IMAGE",)},
         }
@@ -90,10 +102,13 @@ class Qwen3_VQA:
 
     def inference(
         self,
-        text,
+        system,
+        user,
+        assistant,
         model,
         keep_model_loaded,
         temperature,
+        repetition_penalty,
         max_new_tokens,
         min_pixels,
         max_pixels,
@@ -150,52 +165,63 @@ class Qwen3_VQA:
         if image is not None:
             pil_image = ToPILImage()(image[0].permute(2, 0, 1))
             temp_path = Path(folder_paths.temp_directory) / f"temp_image_{seed}.png"
+            temp_path.parent.mkdir(parents=True, exist_ok=True)
             pil_image.save(temp_path)
 
         with torch.no_grad():
+            messages = [
+                {
+                    "role": "system",
+                    "content": system,
+                },
+            ]
             if source_path:
-                messages = [
-                    {
-                        "role": "system",
-                        "content": "You are QwenVL, you are a helpful assistant expert in turning images into words.",
-                    },
+                messages += [
                     {
                         "role": "user",
                         "content": source_path
                         + [
-                            {"type": "text", "text": text},
+                            {"type": "text", "text": user},
                         ],
                     },
                 ]
             elif temp_path:
-                messages = [
-                    {
-                        "role": "system",
-                        "content": "You are QwenVL, you are a helpful assistant expert in turning images into words.",
-                    },
+                messages += [
                     {
                         "role": "user",
                         "content": [
                             {"type": "image", "image": f"file://{temp_path}"},
-                            {"type": "text", "text": text},
+                            {"type": "text", "text": user},
                         ],
                     },
                 ]
                 # raise ValueError("Either image or video must be provided")
             else:
-                messages = [
+                messages += [
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": text},
+                            {"type": "text", "text": user},
                         ],
                     }
                 ]
+            if assistant.strip() != "":
+                messages += [
+                    {
+                        "role": "assistant",
+                        "content": assistant,
+                    }
+                ]
+                # Preparation for inference
+                text = self.processor.apply_chat_template(
+                    messages, tokenize=False, continue_final_message=True
+                )
+            else:
+                # Preparation for inference
+                text = self.processor.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True,
+                )
 
-            # Preparation for inference
-            text = self.processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
             image_inputs, video_inputs = process_vision_info(messages)
             inputs = self.processor(
                 text=[text],
@@ -207,7 +233,7 @@ class Qwen3_VQA:
             inputs = inputs.to(self.device)
             # Inference: Generation of the output
             generated_ids = self.model.generate(
-                **inputs, max_new_tokens=max_new_tokens, temperature=temperature
+                **inputs, max_new_tokens=max_new_tokens, temperature=temperature, repetition_penalty=repetition_penalty
             )
             generated_ids_trimmed = [
                 out_ids[len(in_ids) :]
