@@ -1,9 +1,11 @@
 import os
+import re
 import torch
 import folder_paths
 from torchvision.transforms import ToPILImage
 from transformers import (
     Qwen3VLForConditionalGeneration,
+    Qwen3VLMoeForConditionalGeneration,
     AutoProcessor,
     BitsAndBytesConfig,
 )
@@ -46,6 +48,11 @@ class Qwen3_VQA_Customized:
                         "Qwen3-VL-4B-Thinking",
                         "Qwen3-VL-8B-Instruct",
                         "Qwen3-VL-8B-Thinking",
+                        "Huihui-Qwen3-VL-8B-Thinking-abliterated",
+                        "Huihui-Qwen3-VL-4B-Thinking-abliterated",
+                        "Huihui-Qwen3-VL-8B-Instruct-abliterated",
+                        "Huihui-Qwen3-VL-4B-Instruct-abliterated",
+                        "Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated",
                     ],
                     {"default": "Qwen3-VL-4B-Instruct-FP8"},
                 ),
@@ -120,7 +127,10 @@ class Qwen3_VQA_Customized:
     ):
         if seed != -1:
             torch.manual_seed(seed)
-        model_id = f"qwen/{model}"
+        if model.startswith("Huihui-"):
+            model_id = f"huihui-ai/{model}"
+        else:
+            model_id = f"qwen/{model}"
         self.model_checkpoint = os.path.join(
             folder_paths.models_dir, "prompt_generator", os.path.basename(model_id)
         )
@@ -153,13 +163,22 @@ class Qwen3_VQA_Customized:
             else:
                 quantization_config = None
 
-            self.model = Qwen3VLForConditionalGeneration.from_pretrained(
-                self.model_checkpoint,
-                dtype=torch.bfloat16 if self.bf16_support else torch.float16,
-                device_map="auto",
-                attn_implementation=attention,
-                quantization_config=quantization_config,
-            )
+            if re.match(r"\d+B-A\d+B", model):
+                self.model = Qwen3VLMoeForConditionalGeneration.from_pretrained(
+                    self.model_checkpoint,
+                    dtype=torch.bfloat16 if self.bf16_support else torch.float16,
+                    device_map="auto",
+                    attn_implementation=attention,
+                    quantization_config=quantization_config,
+                )
+            else:
+                self.model = Qwen3VLForConditionalGeneration.from_pretrained(
+                    self.model_checkpoint,
+                    dtype=torch.bfloat16 if self.bf16_support else torch.float16,
+                    device_map="auto",
+                    attn_implementation=attention,
+                    quantization_config=quantization_config,
+                )
 
         temp_path = None
         if image is not None:
