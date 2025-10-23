@@ -163,11 +163,19 @@ class Qwen3_VQA_Customized:
             else:
                 quantization_config = None
 
-            if re.match(r"\d+B-A\d+B", model):
+            if re.match(r".*\d+B\-A\d+B.*", model):
+                print("Loading Mixture of Experts model...", flush=True)
+                quantization_config.llm_int8_enable_fp32_cpu_offload = True
+                device_map = {
+                    "model.vision_tower": "cpu",
+                    "model.mm_projector": "cpu",
+                    "lm_head": "cpu",
+                    "model": 0,  # 其余权重进cuda:0
+                }
                 self.model = Qwen3VLMoeForConditionalGeneration.from_pretrained(
                     self.model_checkpoint,
                     dtype=torch.bfloat16 if self.bf16_support else torch.float16,
-                    device_map="auto",
+                    device_map=device_map,
                     attn_implementation=attention,
                     quantization_config=quantization_config,
                 )
