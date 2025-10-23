@@ -48,10 +48,11 @@ class Qwen3_VQA_Customized:
                         "Qwen3-VL-4B-Thinking",
                         "Qwen3-VL-8B-Instruct",
                         "Qwen3-VL-8B-Thinking",
-                        "Huihui-Qwen3-VL-8B-Thinking-abliterated",
+                        "Qwen3-VL-30B-A3B-Instruct",
+                        "Huihui-Qwen3-VL-4B-Instruct-abliterated",
                         "Huihui-Qwen3-VL-4B-Thinking-abliterated",
                         "Huihui-Qwen3-VL-8B-Instruct-abliterated",
-                        "Huihui-Qwen3-VL-4B-Instruct-abliterated",
+                        "Huihui-Qwen3-VL-8B-Thinking-abliterated",
                         "Huihui-Qwen3-VL-30B-A3B-Instruct-abliterated",
                     ],
                     {"default": "Qwen3-VL-4B-Instruct-FP8"},
@@ -98,7 +99,7 @@ class Qwen3_VQA_Customized:
                         "sdpa",
                         "flash_attention_2",
                     ],
-                )
+                ),
             },
             "optional": {"source_path": ("PATH",), "image": ("IMAGE",)},
         }
